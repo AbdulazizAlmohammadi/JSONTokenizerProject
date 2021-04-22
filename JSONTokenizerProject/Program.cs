@@ -206,16 +206,16 @@ namespace JSONTokenizerProject
     public class JObject
     {
         public List<JKeyValue> keyValuel;
-        public Input input;
+        private Input input;
 
         public JObject(Input input)
         {
             this.input = input;
         }
 
-        public JObject getObject()
+        public List<JKeyValue> getObject()
         {
-            return this;
+            return this.keyValuel;
         }
     }
     public class JArray : JSONValue {
