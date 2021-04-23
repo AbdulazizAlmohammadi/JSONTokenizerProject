@@ -268,13 +268,14 @@ namespace JSONTokenizerProject
         public JSONValue value;
     }
 
+
     class Program
     {
         static void Main(string[] args)
         {
             JSON json = new JSON("123 123.4 ezz");
             json.getObject();
-
+            Console.WriteLine(); 
             /*
              Jbject o = getObj(
              `
