@@ -99,6 +99,7 @@ namespace JSONTokenizerProject
             return buffer;
         }
     }
+
     public class Token
     {
         public int Position { set; get; }
@@ -113,11 +114,13 @@ namespace JSONTokenizerProject
             this.Value = value;
         }
     }
+
     public abstract class Tokenizable
     {
         public abstract bool tokenizable(Tokenizer tokenizer);
         public abstract Token tokenize(Tokenizer tokenizer);
     }
+
     public class Tokenizer
     {
         public List<Token> tokens;
@@ -142,13 +145,9 @@ namespace JSONTokenizerProject
         }
         public List<Token> all() { return null; }
     }
+
     public class IdTokenizer : Tokenizable
     {
-        private List<string> keywords;
-        public IdTokenizer(List<string> keywords)
-        {
-            this.keywords = keywords;
-        }
         public override bool tokenizable(Tokenizer t)
         {
             char currentCharacter = t.input.peek();
@@ -166,6 +165,7 @@ namespace JSONTokenizerProject
                 "identifier", t.input.loop(isId));
         }
     }
+
     public class NumberTokenizer : Tokenizable
     {
         public override bool tokenizable(Tokenizer t)
@@ -174,7 +174,9 @@ namespace JSONTokenizerProject
         }
         static bool isDigit(Input input)
         {
-            return Char.IsDigit(input.peek());
+            char currentChar = input.Character;
+
+            return Char.IsDigit(input.peek()) || input.peek() == '.';
         }
         public override Token tokenize(Tokenizer t)
         {
@@ -182,6 +184,7 @@ namespace JSONTokenizerProject
                 "number", t.input.loop(isDigit));
         }
     }
+
     public class WhiteSpaceTokenizer : Tokenizable
     {
         public override bool tokenizable(Tokenizer t)
@@ -199,60 +202,92 @@ namespace JSONTokenizerProject
         }
     }
 
-    public abstract class JSONValue
+    public class JSON
     {
-        
-    }
-    public class JObject
-    {
-        public List<JKeyValue> keyValuel;
         private Input input;
 
-        public JObject(Input input)
+        public JSON(string input)
         {
-            this.input = input;
+            this.input = new Input(input);
         }
 
-        public List<JKeyValue> getObject()
+        public void getObject()
         {
-            return this.keyValuel;
+            Tokenizer t = new Tokenizer(this.input, new Tokenizable[]
+            {
+                new IdTokenizer(),
+                new NumberTokenizer(),
+                new WhiteSpaceTokenizer()
+            });
+
+            Token token = t.tokenize();
+            while (token != null)
+            {
+                Console.WriteLine(token.Value);
+                token = t.tokenize();
+            }
+
+            //Console.WriteLine(t.tokenize().Value);
+            // List<Token> tokens = t.all();
         }
     }
-    public class JArray : JSONValue {
+
+    public abstract class JSONValue
+    {
+
+    }
+
+    public class JObject : JSONValue
+    {
+        public List<JKeyValue> values;
+    }
+
+    public class JArray : JSONValue
+    {
         public List<JSONValue> values;
     }
-    public class JString : JSONValue {
+
+    public class JString : JSONValue
+    {
         public string value;
     }
-    public class JNumber : JSONValue {
+
+    public class JNumber : JSONValue
+    {
         public double value;
     }
-    public class JBool : JSONValue {
+
+    public class JBool : JSONValue
+    {
         public bool value;
     }
-    public class JKeyValue{
+
+    public class JKeyValue
+    {
         public string key;
         public JSONValue value;
     }
-
 
     class Program
     {
         static void Main(string[] args)
         {
-           /*
-            Jbject o = getObj(
-            `
-                {
-                    "id" : 123321,
-                    "name" : "ali",
-                    "address" : 
-                        {
-           
-                        }
-                }
-            `);
-            */
+            JSON json = new JSON("123 123.4 ezz");
+            json.getObject();
+
+            /*
+             Jbject o = getObj(
+             `
+                 {
+                     "id" : 123321,
+                     "name" : "ali",
+                     "address" : 
+                         {
+
+                         }
+                 }
+             `);
+             */
         }
     }
 }
