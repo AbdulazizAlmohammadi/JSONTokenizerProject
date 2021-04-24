@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JSONTokenizerProject;
+using System;
 using System.Collections.Generic;
 
 namespace JSONTokenizerProject
@@ -88,7 +89,7 @@ namespace JSONTokenizerProject
         public Input reset() { return this; }
         public char peek(int numOfSteps = 1)
         {
-            if (this.hasMore()) return this.input[this.NextPosition];
+            if (this.hasMore(numOfSteps)) return this.input[this.Position + numOfSteps];
             return '\0';
         }
         public string loop(InputCondition condition)
@@ -146,6 +147,8 @@ namespace JSONTokenizerProject
         public List<Token> all() { return null; }
     }
 
+    /// Tokenizers ///
+
     public class IdTokenizer : Tokenizable
     {
         public override bool tokenizable(Tokenizer t)
@@ -202,6 +205,95 @@ namespace JSONTokenizerProject
         }
     }
 
+
+    public class SpecialCharacterTokenizer : Tokenizable
+    {
+        List<char> specialChar = new List<char> { '}', '{', ':', ',', ']', '[' };
+        public override bool tokenizable(Tokenizer t)
+        {
+            char peek = t.input.peek();
+            return specialChar.Contains(peek);
+        }
+
+        public override Token tokenize(Tokenizer t)
+        {
+            Token token = new Token(t.input.Position, t.input.LineNumber,
+                "", "");
+            char peek = t.input.peek();
+            if (peek == '{')
+            {
+                token.Value += t.input.step().Character;
+                token.Type = "openingBrace";
+                return token;
+            }
+            else if (peek == '}')
+            {
+                token.Value += t.input.step().Character;
+                token.Type = "closingBrace";
+                return token;
+            }
+            else if (peek == ':')
+            {
+                token.Value += t.input.step().Character;
+                token.Type = "colon";
+                return token;
+            }
+            else if (peek == ',')
+            {
+                token.Value += t.input.step().Character;
+                token.Type = "comma";
+                return token;
+            }
+            else if (peek == '[')
+            {
+                token.Value += t.input.step().Character;
+                token.Type = "openingBracket";
+                return token;
+            }
+            else
+            {
+                token.Value += t.input.step().Character;
+                token.Type = "closingBracket";
+                return token;
+            }
+
+        }
+    }
+
+    public class StringTokenizer : Tokenizable
+    {
+        public override bool tokenizable(Tokenizer t)
+        {
+            return t.input.hasMore() && t.input.peek() == '\"';
+        }
+
+        public bool isString(Tokenizer t)
+        {
+            return t.input.hasMore();
+        }
+
+        public override Token tokenize(Tokenizer t)
+        {
+            Token token = new Token(t.input.Position, t.input.LineNumber,
+                "string", "");
+            while (isString(t))
+            {
+                if (t.input.peek(2) == '\"')
+                {
+                    token.Value += t.input.step().Character;
+                    token.Value += t.input.step().Character;
+
+                    break;
+                }
+                else token.Value += t.input.step().Character;
+            }
+            return token;
+        }
+    }
+
+
+    ///JSONs
+
     public class JSON
     {
         private Input input;
@@ -211,25 +303,128 @@ namespace JSONTokenizerProject
             this.input = new Input(input);
         }
 
-        public void getObject()
+        public JObject getObject()
         {
+            JKeyValue keyValue = new JKeyValue();
+            List<JKeyValue> list = new List<JKeyValue> { };
+            JObject jsonObject = new JObject();
             Tokenizer t = new Tokenizer(this.input, new Tokenizable[]
             {
-                new IdTokenizer(),
-                new NumberTokenizer(),
-                new WhiteSpaceTokenizer()
+                new StringTokenizer(),
+               // new IdTokenizer(),
+               // new NumberTokenizer(),
+                new WhiteSpaceTokenizer(),
+                new SpecialCharacterTokenizer(),
             });
-
-            Token token = t.tokenize();
-            while (token != null)
+            Token token;
+            token = t.tokenize();
+            if (token.Type == "openingBrace")
             {
-                Console.WriteLine(token.Value);
-                token = t.tokenize();
+                Console.Write(token.Value);
+                while (true)
+                {
+
+                    token = t.tokenize();
+
+                    while (token.Type == "whitespace")
+                    {
+
+                        token = t.tokenize();
+                    }
+                    //key token
+                    if (token.Type == "string")
+                    {
+                        Console.Write(token.Value);
+                        keyValue.key = token.Value;
+                    }
+                    else throw new Exception("Not a key");
+
+                    token = t.tokenize();
+                    while (token.Type == "whitespace")
+                    {
+
+                        token = t.tokenize();
+                    }
+                    // token == :
+                    if (token.Type == "colon")
+                    {
+                        Console.Write(token.Value);
+                        // throw new Exception("Error no colon");
+                    }
+
+
+                    //token == value
+                    token = t.tokenize();
+                    while (token.Type == "whitespace")
+                    {
+
+                        token = t.tokenize();
+                    }
+                    if (token.Type == "number")
+                    {
+                        JNumber number = new JNumber();
+                        number.value = double.Parse(token.Value);
+                        keyValue.value = number;
+                    }
+                    else if (token.Type == "object")
+                    {
+                        JObject o = getObject();
+                        keyValue.value = o;
+                    }
+                    else if (token.Type == "string")
+                    {
+
+                        JString str = new JString();
+                        str.value = token.Value;
+                        keyValue.value = str;
+                        Console.Write(token.Value);
+                    }
+
+                    list.Add(keyValue);
+
+
+                    //check for ,
+                    token = t.tokenize();
+                    while (token.Type == "whitespace")
+                    {
+
+                        token = t.tokenize();
+                    }
+                    if (token.Type != "comma" && token.Type != "closingBrace")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write(token.Value);
+                        Console.Write("  <------ I catch u");
+                        Console.ForegroundColor = ConsoleColor.White;
+
+                        break;
+                        // throw new Exception("Error");
+                    }
+                    else if (token.Type == "closingBrace")
+                    {
+                        Console.Write(token.Value);
+                        break;
+                    }
+
+                }
+
             }
 
-            //Console.WriteLine(t.tokenize().Value);
+
             // List<Token> tokens = t.all();
+            // token = t.tokenize();
+            /*while (token != null)
+            {
+                Console.Write(token.Value);
+                token = t.tokenize();
+            }*/
+            jsonObject.values = list;
+
+            return jsonObject;
+
         }
+
+
     }
 
     public abstract class JSONValue
@@ -267,12 +462,14 @@ namespace JSONTokenizerProject
         public string key;
         public JSONValue value;
     }
+    //handlers return token 
 
     class Program
     {
         static void Main(string[] args)
         {
-            JSON json = new JSON("123 123.4 ezz");
+
+            JSON json = new JSON("{ \"Hello\" : \"world\"}");
             json.getObject();
 
             /*
@@ -283,7 +480,6 @@ namespace JSONTokenizerProject
                      "name" : "ali",
                      "address" : 
                          {
-
                          }
                  }
              `);
