@@ -205,6 +205,9 @@ namespace JSONTokenizerProject
         }
     }
 
+    public class JSON
+    }
+
     public class SpecialCharacterTokenizer : Tokenizable
     {
         List<char> specialChar = new List<char> { '}', '{', ':', ',',']','[' };
@@ -478,4 +481,3 @@ namespace JSONTokenizerProject
              */
         }
     }
-}

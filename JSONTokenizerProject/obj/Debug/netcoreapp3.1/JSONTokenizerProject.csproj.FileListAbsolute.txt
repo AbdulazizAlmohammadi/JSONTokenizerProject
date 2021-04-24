@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\3zAl7arbi\source\repos\JSONTokenizerProject\JSONTokenizerProject\bin\Debug\netcoreapp3.1\JSONTokenizerProject.exe
 C:\Users\3zAl7arbi\source\repos\JSONTokenizerProject\JSONTokenizerProject\bin\Debug\netcoreapp3.1\JSONTokenizerProject.deps.json
 C:\Users\3zAl7arbi\source\repos\JSONTokenizerProject\JSONTokenizerProject\bin\Debug\netcoreapp3.1\JSONTokenizerProject.runtimeconfig.json
@@ -11,3 +12,18 @@ C:\Users\3zAl7arbi\source\repos\JSONTokenizerProject\JSONTokenizerProject\obj\De
 C:\Users\3zAl7arbi\source\repos\JSONTokenizerProject\JSONTokenizerProject\obj\Debug\netcoreapp3.1\JSONTokenizerProject.dll
 C:\Users\3zAl7arbi\source\repos\JSONTokenizerProject\JSONTokenizerProject\obj\Debug\netcoreapp3.1\JSONTokenizerProject.pdb
 C:\Users\3zAl7arbi\source\repos\JSONTokenizerProject\JSONTokenizerProject\obj\Debug\netcoreapp3.1\JSONTokenizerProject.genruntimeconfig.cache
+=======
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\bin\Debug\netcoreapp3.1\JSONTokenizerProject.exe
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\bin\Debug\netcoreapp3.1\JSONTokenizerProject.deps.json
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\bin\Debug\netcoreapp3.1\JSONTokenizerProject.runtimeconfig.json
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\bin\Debug\netcoreapp3.1\JSONTokenizerProject.runtimeconfig.dev.json
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\bin\Debug\netcoreapp3.1\JSONTokenizerProject.dll
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\bin\Debug\netcoreapp3.1\JSONTokenizerProject.pdb
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\obj\Debug\netcoreapp3.1\JSONTokenizerProject.csprojAssemblyReference.cache
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\obj\Debug\netcoreapp3.1\JSONTokenizerProject.AssemblyInfoInputs.cache
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\obj\Debug\netcoreapp3.1\JSONTokenizerProject.AssemblyInfo.cs
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\obj\Debug\netcoreapp3.1\JSONTokenizerProject.csproj.CoreCompileInputs.cache
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\obj\Debug\netcoreapp3.1\JSONTokenizerProject.dll
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\obj\Debug\netcoreapp3.1\JSONTokenizerProject.pdb
+C:\Users\sulta\source\repos\JSONTokenizerProject\JSONTokenizerProject\obj\Debug\netcoreapp3.1\JSONTokenizerProject.genruntimeconfig.cache
+>>>>>>> 7900595c07a45aa04282c9d1e8864520d0d80b59
