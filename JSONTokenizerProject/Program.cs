@@ -205,7 +205,6 @@ namespace JSONTokenizerProject
         }
     }
 
-
     public class SpecialCharacterTokenizer : Tokenizable
     {
         List<char> specialChar = new List<char> { '}', '{', ':', ',', ']', '[' };
@@ -291,7 +290,6 @@ namespace JSONTokenizerProject
         }
     }
 
-
     ///JSONs
 
     public class JSON
@@ -375,7 +373,7 @@ namespace JSONTokenizerProject
                     else throw new Exception("Not a key");
 
                     token = t.tokenize();
-                    while (token.Type == "whitespace")
+                    while (token != null && token.Type == "whitespace")
                     {
 
                         token = t.tokenize();
@@ -389,12 +387,22 @@ namespace JSONTokenizerProject
                         // throw new Exception("Error no colon");
                     }
 
+                    while (char.IsWhiteSpace(t.input.peek()))
+                    {
+                        token = t.tokenize();
+                        Console.Write(token.Value);
 
+                    }
                     //token == value
                     if (t.input.peek() == '{')
                     {
                         JObject o = getObject();
                         keyValue.value = o;
+                    }else if(t.input.peek() == '[')
+                    {
+                        Console.Write(t.input.peek());
+                        JArray arr = getArray();
+                        keyValue.value = arr;
                     }
                     else {
                         token = t.tokenize();
@@ -413,7 +421,7 @@ namespace JSONTokenizerProject
                     }
                     if (token.Type != "comma" && token.Type != "closingBrace")
                     {
-                        throw new Exception("Not a comma or closing brace");
+                        break;
                         
                         
                     }
@@ -450,7 +458,71 @@ namespace JSONTokenizerProject
 
         }
 
+        public JArray getArray()
+        {
+            JArray arr = new JArray();
+            arr.values = new List<JSONValue> { };
+            Tokenizer t = new Tokenizer(this.input, new Tokenizable[]
+            {
+                new StringTokenizer(),
+                // new IdTokenizer(),
+                new NumberTokenizer(),
+                new WhiteSpaceTokenizer(),
+                new SpecialCharacterTokenizer(),
+            });
+            Token token = t.tokenize();
+            Console.Write(token.Value);
 
+            while (t.input.hasMore())
+            {
+                while (char.IsWhiteSpace(t.input.peek()))
+                {
+                   token = t.tokenize();
+                }
+
+                //Values check
+                if(t.input.peek() == '{')
+                {
+                    JObject o = getObject();
+                    arr.values.Add(o);
+                }
+                else if(t.input.peek() == '[')
+                {
+                    JArray jarr = getArray();
+                    arr.values.Add(jarr);
+                }
+                else
+                {
+                    token = t.tokenize();
+                    Console.Write(token.Value);
+                    
+                    arr.values.Add(this.parse(token));
+                }
+
+
+                //comma chick and ]
+                while (char.IsWhiteSpace(t.input.peek()))
+                {
+                    token = t.tokenize();
+                }
+                token = t.tokenize();
+                if(token.Type != "comma" && token.Type != "closingBracket")
+                {
+                    throw new Exception("Invalid");
+                    
+                } else if(token.Type == "closingBracket")
+                {
+                    Console.Write(token.Value);
+                    break;
+                }
+                else
+                {
+                    Console.Write(token.Value);
+                }
+            }
+
+            return arr;
+        }
     }
 
     public abstract class JSONValue
@@ -499,7 +571,7 @@ namespace JSONTokenizerProject
         static void Main(string[] args)
         {
 
-            JSON json = new JSON("{ \"Hello\":{\"hh\":\"value\"},\"age\":12} ");
+            JSON json = new JSON("{ \"Hello\": \"arr\",\"age\":[\"hh\" , 12 , [1,{\"key\":\"value\"}]]} ");
             json.getObject();
 
             /*
