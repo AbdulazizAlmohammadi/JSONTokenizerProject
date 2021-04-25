@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "PZMe7UzLkfQUWki+Ec97rl9uYraSa+1Xc5m1cqpZI9z3ak1jXQAEIJxUx5oMz5ZVo5NOwACB55tn5zVFzJ7BnQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\3zAl7arbi\\source\\repos\\JSONTokenizerProject\\JSONTokenizerProject\\JSONTokenizerProject.csproj",
+=======
+  "dgSpecHash": "r4yZxtFLh42exxhY/1mpQ70CaxbvLIL++JL+8tFlW1xRARK6Yr8kYga2l49lKeEu8nNFvBHXArQrsS8N6hj9+w==",
+  "success": true,
+  "projectFilePath": "D:\\Tuwaiq\\PROJ1 - JSONTokenizer\\JSONTokenizerProject\\JSONTokenizerProject\\JSONTokenizerProject.csproj",
+>>>>>>> 9bcb91cddf28feb615b17cc46bb8a4c793b600ab
   "expectedPackageFiles": [],
   "logs": []
 }

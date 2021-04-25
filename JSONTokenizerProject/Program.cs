@@ -20,8 +20,12 @@ namespace JSONTokenizerProject
                 "   \"ismarried\" : true\n" +
                 "}");
 
+<<<<<<< HEAD
             //JSON json = new JSON(@" [ 1 , 2 , {""ke5y"" : 55 }, {""TEST"" : {""INSIDE"": [4,{""ARR-_23"":9},4]}} , {""EXAMPLE"" : nuLL} ]");
             //JSON json = new JSON(@" true");
+=======
+            JSON json = new JSON(@"{""key"": 1.7e+3 }");
+>>>>>>> 9bcb91cddf28feb615b17cc46bb8a4c793b600ab
 
             //JSON json1 = new JSON("false");
             //JSON json2 = new JSON("12");
@@ -35,6 +39,7 @@ namespace JSONTokenizerProject
                 JBool jbool = (JBool)js;
                 Console.WriteLine(jbool.value);
 
+<<<<<<< HEAD
             } else if(js is JArray)
             {
                 JArray arr = (JArray)js;
@@ -43,6 +48,11 @@ namespace JSONTokenizerProject
                 JObject obj = (JObject)js;
                 Console.WriteLine(obj.value[1].key);
             }
+=======
+            json.getObject();
+
+
+>>>>>>> 9bcb91cddf28feb615b17cc46bb8a4c793b600ab
         }
     }
 }
