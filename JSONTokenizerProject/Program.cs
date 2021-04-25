@@ -20,8 +20,9 @@ namespace JSONTokenizerProject
             //    "   \"ismarried\" : true\n" +
             //    "}");
 
-            //JSON json = new JSON(@"[ 1 , 2 , {""ke5y"" : 55 }, {""TEST"" : {""INSIDE"": [4,{""ARR-_23"":9},4}} , {""EXAMPLE"" : nuLL} ]");
+            //JSON json = new JSON(@"{""ke5y"" : 55 }");
             JSON json = new JSON(@"{""key"": 1.7e+3 }");
+
 
             //JSON json1 = new JSON("false");
             //JSON json2 = new JSON("12");
