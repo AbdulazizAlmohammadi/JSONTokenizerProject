@@ -1,6 +1,6 @@
 <div dir=rtl>
 
-# Tokenizers Project
+# JSON Tokenizer Project
 
 ## وصف المشروع
 
