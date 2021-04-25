@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace JSONTokenizerProject
 {
     public delegate bool InputCondition(Input input);
+
     public class Input
     {
         private readonly string input;
         private readonly int length;
         private int position;
         private int lineNumber;
+
         //Properties
         public int Length
         {
@@ -19,6 +20,7 @@ namespace JSONTokenizerProject
                 return this.length;
             }
         }
+
         public int Position
         {
             get
@@ -26,6 +28,7 @@ namespace JSONTokenizerProject
                 return this.position;
             }
         }
+
         public int NextPosition
         {
             get
@@ -33,6 +36,7 @@ namespace JSONTokenizerProject
                 return this.position + 1;
             }
         }
+
         public int LineNumber
         {
             get
@@ -40,6 +44,7 @@ namespace JSONTokenizerProject
                 return this.lineNumber;
             }
         }
+
         public char Character
         {
             get
@@ -48,6 +53,7 @@ namespace JSONTokenizerProject
                 else return '\0';
             }
         }
+
         public Input(string input)
         {
             this.input = input;
@@ -55,16 +61,19 @@ namespace JSONTokenizerProject
             this.position = -1;
             this.lineNumber = 1;
         }
+
         public bool hasMore(int numOfSteps = 1)
         {
             if (numOfSteps <= 0) throw new Exception("Invalid number of steps");
             return (this.position + numOfSteps) < this.length;
         }
+
         public bool hasLess(int numOfSteps = 1)
         {
             if (numOfSteps <= 0) throw new Exception("Invalid number of steps");
             return (this.position - numOfSteps) > -1;
         }
+
         //callback -> delegate
         public Input step(int numOfSteps = 1)
         {
@@ -76,6 +85,7 @@ namespace JSONTokenizerProject
             }
             return this;
         }
+
         public Input back(int numOfSteps = 1)
         {
             if (this.hasLess(numOfSteps))
@@ -86,12 +96,18 @@ namespace JSONTokenizerProject
             }
             return this;
         }
-        public Input reset() { return this; }
+
+        public Input reset()
+        {
+            return this;
+        }
+
         public char peek(int numOfSteps = 1)
         {
             if (this.hasMore(numOfSteps)) return this.input[this.Position + numOfSteps];
             return '\0';
         }
+
         public string loop(InputCondition condition)
         {
             string buffer = "";
@@ -107,6 +123,7 @@ namespace JSONTokenizerProject
         public int LineNumber { set; get; }
         public string Type { set; get; }
         public string Value { set; get; }
+
         public Token(int position, int lineNumber, string type, string value)
         {
             this.Position = position;
@@ -119,6 +136,7 @@ namespace JSONTokenizerProject
     public abstract class Tokenizable
     {
         public abstract bool tokenizable(Tokenizer tokenizer);
+
         public abstract Token tokenize(Tokenizer tokenizer);
     }
 
@@ -128,23 +146,30 @@ namespace JSONTokenizerProject
         public bool enableHistory;
         public Input input;
         public Tokenizable[] handlers;
+
         public Tokenizer(string source, Tokenizable[] handlers)
         {
             this.input = new Input(source);
             this.handlers = handlers;
         }
+
         public Tokenizer(Input source, Tokenizable[] handlers)
         {
             this.input = source;
             this.handlers = handlers;
         }
+
         public Token tokenize()
         {
             foreach (var handler in this.handlers)
                 if (handler.tokenizable(this)) return handler.tokenize(this);
             return null;
         }
-        public List<Token> all() { return null; }
+
+        public List<Token> all()
+        {
+            return null;
+        }
     }
 
     /// Tokenizers ///
@@ -155,7 +180,8 @@ namespace JSONTokenizerProject
         {
             return Char.IsLetter(t.input.peek());
         }
-        static bool isLetter(Input input)
+
+        private static bool isLetter(Input input)
         {
             return Char.IsLetter(input.peek());
         }
@@ -177,8 +203,6 @@ namespace JSONTokenizerProject
             {
                 throw new Exception("Invalid Value!");
             }
-
-
             return token;
         }
     }
@@ -189,12 +213,14 @@ namespace JSONTokenizerProject
         {
             return Char.IsDigit(t.input.peek());
         }
-        static bool isDigit(Input input)
+
+        private static bool isDigit(Input input)
         {
             char currentChar = input.Character;
-
-            return Char.IsDigit(input.peek()) || input.peek() == '.';
+            return Char.IsDigit(input.peek()) || input.peek() == 'e'
+                || input.peek() == '.' || input.peek() == 'E' || input.peek() == '+' || input.peek() == '-';
         }
+
         public override Token tokenize(Tokenizer t)
         {
             return new Token(t.input.Position, t.input.LineNumber,
@@ -208,10 +234,12 @@ namespace JSONTokenizerProject
         {
             return Char.IsWhiteSpace(t.input.peek());
         }
-        static bool isWhiteSpace(Input input)
+
+        private static bool isWhiteSpace(Input input)
         {
             return Char.IsWhiteSpace(input.peek());
         }
+
         public override Token tokenize(Tokenizer t)
         {
             return new Token(t.input.Position, t.input.LineNumber,
@@ -221,7 +249,8 @@ namespace JSONTokenizerProject
 
     public class SpecialCharacterTokenizer : Tokenizable
     {
-        List<char> specialChar = new List<char> { '}', '{', ':', ',', ']', '[' };
+        private List<char> specialChar = new List<char> { '}', '{', ':', ',', ']', '[' };
+
         public override bool tokenizable(Tokenizer t)
         {
             char peek = t.input.peek();
@@ -269,7 +298,6 @@ namespace JSONTokenizerProject
                 token.Type = "closingBracket";
                 return token;
             }
-
         }
     }
 
@@ -303,5 +331,4 @@ namespace JSONTokenizerProject
             return token;
         }
     }
-
 }
