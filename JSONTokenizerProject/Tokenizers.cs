@@ -181,7 +181,11 @@ namespace JSONTokenizerProject
             return Char.IsLetter(t.input.peek());
         }
 
+<<<<<<< HEAD
         private static bool isLetter(Input input)
+=======
+        static bool isLetter(Input input)
+>>>>>>> 59601b4f58e7848950916f2d1044d59a35c9fe9e
         {
             return Char.IsLetter(input.peek());
         }
