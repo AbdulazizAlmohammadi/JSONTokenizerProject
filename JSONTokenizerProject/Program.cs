@@ -46,7 +46,7 @@ namespace JSONTokenizerProject
             } else if(js is JObject)
             {
                 JObject obj = (JObject)js;
-                Console.WriteLine(obj.value[0].key);
+                //Console.WriteLine(obj.value[0].key);
             }
 
           //  json.getObject();
